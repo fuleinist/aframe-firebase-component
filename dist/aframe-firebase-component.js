@@ -104,7 +104,7 @@
 	   */
 	  handleEntityAdded: function (id, data) {
 	    // Already added.
-	    if (this.entities[id] || this.broadcastingEntities[id]) { return; }
+	    if (this.entities[id] || this.broadcastingEntities[id] || (localStorage.getItem("entities")&&localStorage.getItem("entities")[id]) ) { return; }
 
 	    // Handle parent-child relationships.
 	    var parentId = data.parentId;
@@ -124,6 +124,7 @@
 	    // Create and reference entity.
 	    var entity = document.createElement('a-entity');
 	    this.entities[id] = entity;
+	    try {sessionStorage.setItem("entities", this.entities);} catch (e) {    if (e == QUOTA_EXCEEDED_ERR) { console.log('Unable to save preferred shirt size.');}}
 
 	    // Components.
 	    Object.keys(data).forEach(function setComponent (componentName) {
